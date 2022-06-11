@@ -10,12 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_07_184043) do
+ActiveRecord::Schema.define(version: 2022_06_10_164830) do
+
+  create_table "campaigns", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "image"
+    t.string "sector", null: false
+    t.string "country", null: false
+    t.integer "creator_id", null: false
+    t.decimal "target_amount", precision: 15, scale: 2, default: "0.0"
+    t.decimal "investment_multiple", precision: 15, scale: 2, default: "0.0"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "investments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.decimal "amount", precision: 15, scale: 2, default: "0.0"
+    t.bigint "campaign_id", null: false
+    t.integer "creator_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["campaign_id"], name: "index_investments_on_campaign_id"
+  end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
-    t.string "phone_number"
+    t.string "jti", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -27,7 +48,9 @@ ActiveRecord::Schema.define(version: 2022_06_07_184043) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["jti"], name: "index_users_on_jti", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "investments", "campaigns"
 end
