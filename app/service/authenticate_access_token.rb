@@ -8,14 +8,14 @@ class AuthenticateAccessToken
   end
 
   def call
-    api_tokens.include?(headers[API_ACCESS_TOKEN_KEY])
+    api_tokens.eql?(headers[API_ACCESS_TOKEN_KEY])
   end
 
   def api_tokens
     begin
-      ENV['API_ACCESS_TOKENS'].split(' ')
+      ENV['API_ACCESS_TOKEN']
     rescue StandardError
-      []
+      ''
     end
   end
 end
