@@ -10,13 +10,13 @@ class User < ApplicationRecord
   before_create :add_jti
 
   def add_jti
-    self.jti ||= SecureRandom.uuid
+    self.jti = SecureRandom.uuid
   end
 
   def jwt_payload
     super.merge('expires_at' => (Time.now + 1.day))
   end
 
-  validates :email, :encrypted_password, :jti, presence: true
+  validates :email, :encrypted_password, presence: true
 
 end
